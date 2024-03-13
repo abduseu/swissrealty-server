@@ -25,6 +25,7 @@ async function run() {
         // await client.connect();
         const database = client.db('swissrealty_db')
         const properties = database.collection('properties')
+        const users = database.collection('users')
 
 
         /* PROPERTIES START */
@@ -51,6 +52,54 @@ async function run() {
 
 
         /* PROPERTIES END */
+        /* START USERS */
+
+
+        //Users >> Create (upsert)
+        app.post('/users', async (req, res) => {
+            const user = req.body;
+
+            const query = { email: user.email }
+            const existingUser = await users.findOne(query);
+            if (existingUser) {
+                return res.send({ message: 'user already exists', insertedId: null })
+            }
+            const result = await users.insertOne(user);
+            res.send(result);
+        });
+
+        //Users >> read all
+        app.get('/users', async (req, res) => {
+            const result = await users.find().toArray()
+            res.send(result)
+        })
+
+        //Users >> read one
+        app.get('/users/:id', async (req, res) => {
+            const id = req.params.id
+
+            const filter = { email: id }
+            const result = await users.findOne(filter)
+            res.send(result)
+        })
+
+        //Users >> update one (change role)
+        app.put('/manage-users/:id', async (req, res) => {
+            const id = req.params.id
+            const changeRole = req.body
+
+            const filter = { _id: new ObjectId(id) }
+            const updatedUser = {
+                $set: {
+                    role: changeRole.role
+                }
+            }
+            const result = await users.updateOne(filter, updatedUser)
+
+            res.send(result)
+        })
+        /* USERS END */
+
 
 
         // Send a ping to confirm a successful connection
