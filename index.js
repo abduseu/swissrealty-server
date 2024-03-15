@@ -50,7 +50,22 @@ async function run() {
             const result = await properties.findOne(filter)
             res.send(result)
         })
+        //properties/_id >> Delete
+        app.delete('/properties/:id', async (req, res) => {
+            const id = req.params.id
 
+            const filter = { _id: new ObjectId(id) }
+            const result = await properties.deleteOne(filter)
+            res.send(result)
+        })
+
+        //agent-listings?email= >> Read query
+        app.get('/agent-listings', async (req, res) => {
+            const email = req.query.email;
+            const filter = { agent_email: email };
+            const result = await properties.find(filter).toArray();
+            res.send(result);
+        });
 
         /* PROPERTIES END */
         /* START USERS */
