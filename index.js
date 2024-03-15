@@ -26,6 +26,7 @@ async function run() {
         const database = client.db('swissrealty_db')
         const properties = database.collection('properties')
         const users = database.collection('users')
+        const wishlist = database.collection('wishlist')
 
 
         /* PROPERTIES START */
@@ -98,7 +99,38 @@ async function run() {
 
             res.send(result)
         })
+
+
         /* USERS END */
+        /* WISHLIST START */
+
+
+        //Wishlist >> Create
+        app.post('/wishlist', async (req, res) => {
+            const wishlistt = req.body
+
+            const result = await wishlist.insertOne(wishlistt)
+            res.send(result)
+        })
+
+        //Wishlist?_id >> Read query
+        app.get('/wishlist', async (req, res) => {
+            const email = req.query.email;
+            const filter = { email: email };
+            const result = await wishlist.find(filter).toArray();
+            res.send(result);
+        });
+
+        //Wishlist/_id >> Delete
+        app.delete('/wishlist/:id', async (req, res) => {
+            const id = req.params.id
+
+            const filter = { _id: new ObjectId(id) }
+            const result = await wishlist.deleteOne(filter)
+            res.send(result)
+        })
+
+        /* WISHLIST END */
 
 
 
