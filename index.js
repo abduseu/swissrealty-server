@@ -50,6 +50,20 @@ async function run() {
             const result = await properties.findOne(filter)
             res.send(result)
         })
+        //properties/_id >> update one
+        app.put('/properties/:id', async (req, res) => {
+            const id = req.params.id
+            const property = req.body
+
+            const filter = { _id: new ObjectId(id) }
+            const updatedProperty = {
+                $set: { ...property }
+            }
+            const options = { upsert: true }
+
+            const result = await properties.updateOne(filter, updatedProperty, options)
+            res.send(result)
+        })
         //properties/_id >> Delete
         app.delete('/properties/:id', async (req, res) => {
             const id = req.params.id
