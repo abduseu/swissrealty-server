@@ -177,6 +177,20 @@ async function run() {
             const result = await offer_request.find().toArray()
             res.send(result)
         })
+        //offer_request >> update one (change status)
+        app.put('/offer-request/:id', async (req, res) => {
+            const id = req.params.id
+            const changeStatus = req.body
+
+            const filter = { _id: new ObjectId(id) }
+            const updatedOffer_request = {
+                $set: {
+                    status: changeStatus.status
+                }
+            }
+            const result = await offer_request.updateOne(filter, updatedOffer_request)
+            res.send(result)
+        })
 
         
         /* OFFER_REQUEST END */
