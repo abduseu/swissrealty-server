@@ -177,6 +177,19 @@ async function run() {
             const result = await offer_request.find().toArray()
             res.send(result)
         })
+        //offer_request?email= >> Read query
+        app.get('/offer-sold', async (req, res) => {
+            const email = req.query.email;
+            const filter = { agent_email: email, status: 'accepted' };
+            const result = await offer_request.find(filter).toArray();
+            res.send(result);
+        });
+        app.get('/offer-bought', async (req, res) => {
+            const email = req.query.email;
+            const filter = { buyer_email: email, status: 'accepted' };
+            const result = await offer_request.find(filter).toArray();
+            res.send(result);
+        });
         //offer_request >> update one (change status)
         app.put('/offer-request/:id', async (req, res) => {
             const id = req.params.id
