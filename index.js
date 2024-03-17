@@ -27,6 +27,7 @@ async function run() {
         const properties = database.collection('properties')
         const users = database.collection('users')
         const wishlist = database.collection('wishlist')
+        const offer_request = database.collection('offer_request')
 
 
         /* PROPERTIES START */
@@ -159,7 +160,27 @@ async function run() {
             res.send(result)
         })
 
+
         /* WISHLIST END */
+        /* OFFER_REQUEST START */
+
+
+        //offer_request >> Create
+        app.post('/offer-request', async (req, res) => {
+            const offer = req.body
+
+            const result = await offer_request.insertOne(offer)
+            res.send(result)
+        })
+        //offer_request >> Read
+        app.get('/offer-request', async (req, res) => {
+            const result = await offer_request.find().toArray()
+            res.send(result)
+        })
+
+        
+        /* OFFER_REQUEST END */
+
 
 
 
