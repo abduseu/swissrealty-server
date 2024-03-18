@@ -129,6 +129,14 @@ async function run() {
 
             res.send(result)
         })
+        //users/_id >> Delete
+        app.delete('/manage-users/:id', async (req, res) => {
+            const id = req.params.id
+
+            const filter = { _id: new ObjectId(id) }
+            const result = await users.deleteOne(filter)
+            res.send(result)
+        })
 
 
         /* USERS END */
